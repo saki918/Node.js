@@ -69,6 +69,37 @@ app.post('/create', (req, res) => {
   //   }
   // ); 
 });
+// delete method 作成
+app.post('/delete/:id', (req, res) => {
+  connection.query(
+    "delete from items where id = ?",
+    [req.params.id],
+    (error, results) => {
+      res.redirect("/index")
+    }
+  );
+});
 
+// 編集画面を表示するルーティングを作成
+app.get('/edit/:id', (req, res) => {
+  connection.query(
+    "select * from items where id = ?",
+    [req.params.id],
+    (error, results) => {
+      res.render("edit.ejs",{item: results[0]});
+    }
+  );
+});
+// update method
+app.post('/update/:id', (req, res) => {
+  // 選択されたメモを更新する処理を書いてください
+  connection.query(
+    "update items set name = ? where id = ?",
+    [req.body.itemName, req.params.id],
+    (error, results) => {
+      res.redirect("/index");
+    }
+  );
+});
 // サーバーを起動するコードを貼り付けてください
 app.listen(3000);
